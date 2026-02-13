@@ -68,10 +68,6 @@ resize();
 const TAU=Math.PI*2;
 const rand=(a,b)=>a+Math.random()*(b-a);
 
-/////////////////////////////////////////////////
-// ⭐ 星空（柔一点）
-/////////////////////////////////////////////////
-
 const stars=[];
 for(let i=0;i<250;i++){
 stars.push({
@@ -92,10 +88,6 @@ ctx.fill();
 ctx.globalAlpha=1;
 }
 
-/////////////////////////////////////////////////
-// 🎆 粒子
-/////////////////////////////////////////////////
-
 class Particle{
 constructor(x,y,color,vx,vy,life,size){
 this.x=x;
@@ -111,8 +103,8 @@ update(){
 this.x+=this.vx;
 this.y+=this.vy;
 
-this.vy+=0.03;        // 重力轻一点
-this.vx*=0.99;        // 慢慢减速
+this.vy+=0.03;        
+this.vx*=0.99;        
 this.vy*=0.99;
 
 this.life--;
@@ -136,10 +128,6 @@ let particles=[];
 let rockets=[];
 let show=false;
 
-/////////////////////////////////////////////////
-// 💥 柔和烟花
-/////////////////////////////////////////////////
-
 function explode(x,y){
 
 let palette=[
@@ -151,7 +139,6 @@ let palette=[
 
 let color=palette[Math.floor(Math.random()*palette.length)];
 
-// 🌸 主花瓣层
 let petals=28;
 for(let i=0;i<petals;i++){
 
@@ -168,7 +155,6 @@ for(let i=0;i<petals;i++){
     ));
 }
 
-// 🌸 第二层（错位更自然）
 for(let i=0;i<petals;i++){
 
     let angle=(TAU/petals)*i + 0.1;
@@ -184,7 +170,6 @@ for(let i=0;i<petals;i++){
     ));
 }
 
-// ✨ 中心亮点
 for(let i=0;i<6;i++){
     let angle=rand(0,TAU);
     let speed=rand(0.5,1.2);
@@ -201,11 +186,6 @@ for(let i=0;i<6;i++){
 }
 
 
-
-/////////////////////////////////////////////////
-// 🚀 火箭
-/////////////////////////////////////////////////
-
 class Rocket{
 constructor(x,targetY){
 this.x=x;
@@ -219,7 +199,6 @@ update(){
 this.y+=this.vy;
 this.vy+=0.05;
 
-// 柔尾焰
 particles.push(new Particle(
 this.x,
 this.y+6,
@@ -242,10 +221,6 @@ ctx.fillRect(this.x,this.y,2,8);
 }
 }
 
-/////////////////////////////////////////////////
-// ❤️ 心形
-/////////////////////////////////////////////////
-
 let clickCount=0;
 let heartPoints=[];
 let heartIndex=0;
@@ -263,10 +238,6 @@ y:HEIGHT*0.4+y*11
 }
 }
 
-/////////////////////////////////////////////////
-// ⏳ 倒计时
-/////////////////////////////////////////////////
-
 let n=3;
 const countEl=document.getElementById("count");
 const msgEl=document.getElementById("msg");
@@ -283,17 +254,14 @@ if(n>0){
     msgEl.style.opacity=1;
     msgEl.style.transform="scale(1)";
 
-    // 💥 文字爆炸
     setTimeout(()=>{
         explode(WIDTH/2,HEIGHT*0.4);
     },600);
-
-    // 🌫 文字慢慢消失
+    
     setTimeout(()=>{
         msgEl.style.opacity=0;
     },1500);
 
-    // 🎆 等文字消失后再开始烟花
     setTimeout(()=>{
         show=true;
     },2500);
@@ -301,12 +269,6 @@ if(n>0){
     clearInterval(timer);
 }
 },1000);
-
-
-
-/////////////////////////////////////////////////
-// 点击
-/////////////////////////////////////////////////
 
 canvas.addEventListener("click",e=>{
 clickCount++;
@@ -319,10 +281,6 @@ heartIndex=0;
 
 rockets.push(new Rocket(e.clientX,rand(HEIGHT*0.35,HEIGHT*0.5)));
 });
-
-/////////////////////////////////////////////////
-// 主循环
-/////////////////////////////////////////////////
 
 function animate(){
 requestAnimationFrame(animate);
@@ -343,7 +301,6 @@ rockets.forEach(r=>{r.update();r.draw();});
 particles=particles.filter(p=>p.life>0);
 particles.forEach(p=>{p.update();p.draw();});
 
-// 心形慢慢出现（不过分）
 if(ringMode && heartIndex<heartPoints.length){
 let p=heartPoints[heartIndex];
 explode(p.x,p.y);
